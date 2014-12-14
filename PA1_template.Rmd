@@ -28,7 +28,7 @@ Look at the structure of the data (number of observations, number of variables, 
 str(activity)
 ```
 
-##### Add a varible to identify the hour and minute of the measurements
+##### Add a variable to identify the hour and minute of the measurements
 
 We see that the time of day of a measurement is reported in the 'interval' variable. At first glance, the interval looks like an integer number of minutes (e.g, 5, 10, 15, etc.):
 ```{r}
@@ -73,7 +73,6 @@ f <- function(i) {
  
 activity$time_of_week <- sapply(day_of_week, f)
 head(activity$time_of_week)
-
 ```
 
 ##### Review the amended activity data set
@@ -129,12 +128,11 @@ Compute the average number of steps taken in each 5-min interval across all days
 ```{r}
 steps_per_interval <- activity %>% group_by(hhmm) %>% summarise(steps = mean(steps, na.rm=TRUE))
 head(steps_per_interval)
-str(steps_per_interval)
 ```
 
 ##### Plot the average number of sets over the day
 
-Let's plot that time series. To get a pretty x-axis label, convert hhmm variable to a real timestamp using the strptime() function:
+Let's plot that time series. To get a pretty x-axis label, convert hhmm variable to a real time stamp using the strptime() function:
 ```{r}
 plot(x = strptime(steps_per_interval$hhmm, format('%H%M')), 
      y = steps_per_interval$steps,
@@ -153,8 +151,49 @@ steps_per_interval[which.max(steps_per_interval$steps),]
 
 ### Imputing missing values
 
-##### [TODO]
-...
+Let's identify and fill in missing data then re-visit the analysis of the total number of steps per day.
+
+##### Compute the number of missing values in the dataset
+
+The number of missing values be computed by using the complete.cases() function. Count the number of rows that are not complete (have an NA value is some column):
+```{r}
+number_of_rows <- nrow(activity)
+number_of_nas  <-sum(!complete.cases(activity))
+number_of_nas
+````
+There are `r number_of_nas` missing values out of `r number_of_rows` observations. 
+
+##### A strategy for filling in the missing values
+
+We will deal with missing values in the following way:
+
+- For each measurement, if the number of steps reported is NA, we will use the mean number of steps for that interval across all days.  
+- If the average number of steps in an interval over all days is NA, we will leave the original measurement as NA.
+
+So, for example, if a value is missing for 10:15am on a given Sunday, we will substitute the average number of steps computed for 10:15 over all days in the data set. If that value is also NA, we will leave measurement as NA.
+
+This simple strategy may not get rid of all NAs. We will compare the number of NAs still left in the new data set.
+
+So let's create a new data set with the missing values filled according to this strategy.
+
+##### Create a new data set with missing values filled in
+```
+TODO
+```
+
+##### Plot a histogram of the total number of steps per day
+
+Let's look at the distribution of steps taken in a day:
+```
+TODO
+```
+
+##### Compute the mean and median of the total number of steps per day
+
+For the imputed data set, compute the mean and median of total number of steps per day and compare that to the original data set.
+```
+TODO
+```
 
 ### Are there differences in activity patterns between weekdays and weekends?
 
@@ -184,7 +223,7 @@ summary(weekend_steps_per_interval)
 
 ##### Plot the weekend and weekday average activity in a panel plot
 
-Let's use the base graphics package (Even though it would probably be easier and prettier to use lattice or ggplot, we can just reuse the plot we did above and tweek the data being shown):
+Let's use the base graphics package (Even though it would probably be easier and prettier to use lattice or ggplot, we can just reuse the plot we did above and tweak the data being shown):
 ```{r fig.height=10}
 par(mfrow=c(2,1))
 

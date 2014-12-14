@@ -77,8 +77,8 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 ##  $ date    : Factor w/ 61 levels &quot;2012-10-01&quot;,&quot;2012-10-02&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
 ##  $ interval: int  0 5 10 15 20 25 30 35 40 45 ...</code></pre>
 </div>
-<div id="add-a-varible-to-identify-the-hour-and-minute-of-the-measurements" class="section level5">
-<h5>Add a varible to identify the hour and minute of the measurements</h5>
+<div id="add-a-variable-to-identify-the-hour-and-minute-of-the-measurements" class="section level5">
+<h5>Add a variable to identify the hour and minute of the measurements</h5>
 <p>We see that the time of day of a measurement is reported in the ‘interval’ variable. At first glance, the interval looks like an integer number of minutes (e.g, 5, 10, 15, etc.):</p>
 <pre class="r"><code>head(activity$interval)</code></pre>
 <pre><code>## [1]  0  5 10 15 20 25</code></pre>
@@ -184,11 +184,6 @@ head(steps_per_interval)</code></pre>
 ## 4 0015 0.1509434
 ## 5 0020 0.0754717
 ## 6 0025 2.0943396</code></pre>
-<pre class="r"><code>str(steps_per_interval)</code></pre>
-<pre><code>## Classes 'tbl_df', 'tbl' and 'data.frame':    288 obs. of  2 variables:
-##  $ hhmm : chr  &quot;0000&quot; &quot;0005&quot; &quot;0010&quot; &quot;0015&quot; ...
-##  $ steps: num  1.717 0.3396 0.1321 0.1509 0.0755 ...
-##  - attr(*, &quot;drop&quot;)= logi TRUE</code></pre>
 </div>
 <div id="plot-the-average-number-of-sets-over-the-day" class="section level5">
 <h5>Plot the average number of sets over the day</h5>
@@ -213,9 +208,40 @@ head(steps_per_interval)</code></pre>
 </div>
 <div id="imputing-missing-values" class="section level3">
 <h3>Imputing missing values</h3>
-<div id="todo" class="section level5">
-<h5>[TODO]</h5>
-<p>…</p>
+<p>Let’s identify and fill in missing data then re-visit the analsyis of the total number of steps per day.</p>
+<div id="compute-the-number-of-missing-values-in-the-dataset" class="section level5">
+<h5>Compute the number of missing values in the dataset</h5>
+<p>The number of missing values be computed by using the complete.cases() function. Count the number of rows that are not complete (have an NA value is some column):</p>
+<pre class="r"><code>number_of_rows &lt;- nrow(activity)
+number_of_nas  &lt;-sum(!complete.cases(activity))
+number_of_nas</code></pre>
+<pre><code>## [1] 2304</code></pre>
+<p>There are 2304 missing values out of 17568 observations.</p>
+</div>
+<div id="a-strategy-for-filling-in-the-missing-values" class="section level5">
+<h5>A strategy for filling in the missing values</h5>
+<p>We will deal with missing values in the following way:</p>
+<ul>
+<li>For each measurement, if the number of steps reported is NA, we will use the mean number of steps for that interval across all days.<br /></li>
+<li>If the average number of steps in an interval over all days is NA, we will leave the original measurement as NA.</li>
+</ul>
+<p>So, for example, if a value is missing for 10:15am on a given Sunday, we will substitute the average number of steps computed for 10:15 over all days in the data set. If that value is also NA, we will leave measurement as NA.</p>
+<p>This simple strategy may not get rid of all NAs. We will compare the number of NAs still left in the new data set.</p>
+<p>So let’s create a new data set with the missing values filled according to this strategy.</p>
+</div>
+<div id="create-a-new-data-set-with-missing-values-filled-in" class="section level5">
+<h5>Create a new data set with missing values filled in</h5>
+<pre><code>TODO</code></pre>
+</div>
+<div id="plot-a-histogram-of-the-total-number-of-steps-per-day-1" class="section level5">
+<h5>Plot a histogram of the total number of steps per day</h5>
+<p>Let’s look at the distribution of steps taken in a day:</p>
+<pre><code>TODO</code></pre>
+</div>
+<div id="compute-the-mean-and-median-of-the-total-number-of-steps-per-day-1" class="section level5">
+<h5>Compute the mean and median of the total number of steps per day</h5>
+<p>For the imputed data set, compute the mean and median of total number of steps per day and compare that to the original data set.</p>
+<pre><code>TODO</code></pre>
 </div>
 </div>
 <div id="are-there-differences-in-activity-patterns-between-weekdays-and-weekends" class="section level3">
