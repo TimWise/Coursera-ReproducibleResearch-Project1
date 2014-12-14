@@ -115,8 +115,8 @@ activity$time_of_week &lt;- sapply(day_of_week, f)
 head(activity$time_of_week)</code></pre>
 <pre><code>## [1] &quot;weekday&quot; &quot;weekday&quot; &quot;weekday&quot; &quot;weekday&quot; &quot;weekday&quot; &quot;weekday&quot;</code></pre>
 </div>
-<div id="the-amended-activty-data-set" class="section level5">
-<h5>The amended activty data set</h5>
+<div id="review-the-amended-activity-data-set" class="section level5">
+<h5>Review the amended activity data set</h5>
 <p>Here’s a summary of the final activity data:</p>
 <pre class="r"><code>str(activity)</code></pre>
 <pre><code>## 'data.frame':    17568 obs. of  5 variables:
@@ -131,7 +131,7 @@ head(activity$time_of_week)</code></pre>
 <h3>What is mean total number of steps taken per day?</h3>
 <div id="compute-the-total-number-of-steps-taken-per-day" class="section level5">
 <h5>Compute the total number of steps taken per day</h5>
-<p>Create a table (steps_per_day) with the total number of steps taken each day. To do this, use the dplyr package to group the activity table by date and sum the number of taken each each day:</p>
+<p>Create a table (steps_per_day) with the total number of steps taken each day. To do this, use the dplyr package to group the activity table by date and sum the number of steps taken for each each day:</p>
 <pre class="r"><code>suppressPackageStartupMessages(library(dplyr))
 steps_per_day &lt;- activity %&gt;% group_by(date) %&gt;% summarise(steps = sum(steps))
 head(steps_per_day)</code></pre>
@@ -222,7 +222,8 @@ head(steps_per_interval)</code></pre>
 <h3>Are there differences in activity patterns between weekdays and weekends?</h3>
 <div id="compute-the-average-weekday-and-weekend-activity-patterns" class="section level5">
 <h5>Compute the average weekday and weekend activity patterns</h5>
-<p>Use the categorical attribute we added earlier to compute the average weekday and weekend patterns.</p>
+<p>Use the categorical attribute we added to compute the average weekday and weekend patterns.</p>
+<p>This is the same computation used to compute averages for all days, except here we filter() to select only the weekend or weekday days.</p>
 <p>Compute the average number of steps for each 5-min interval over all weekday days:</p>
 <pre class="r"><code>weekday_steps_per_interval &lt;- activity %&gt;% 
                                 filter(time_of_week == 'weekday') %&gt;% 
@@ -250,8 +251,8 @@ summary(weekend_steps_per_interval)</code></pre>
 ##                     3rd Qu.: 75.571  
 ##                     Max.   :175.000</code></pre>
 </div>
-<div id="plot-the-weekend-and-weekday-average-activty-in-a-panel-plot" class="section level5">
-<h5>Plot the weekend and weekday average activty in a panel plot</h5>
+<div id="plot-the-weekend-and-weekday-average-activity-in-a-panel-plot" class="section level5">
+<h5>Plot the weekend and weekday average activity in a panel plot</h5>
 <p>Let’s use the base graphics package (Even though it would probably be easier and prettier to use lattice or ggplot, we can just reuse the plot we did above and tweek the data being shown):</p>
 <pre class="r"><code>par(mfrow=c(2,1))
 

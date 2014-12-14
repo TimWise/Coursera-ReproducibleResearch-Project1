@@ -99,7 +99,7 @@ head(activity$time_of_week)
 ## [1] "weekday" "weekday" "weekday" "weekday" "weekday" "weekday"
 ```
 
-##### The amended activty data set
+##### Review the amended activity data set
 Here's a summary of the final activity data:
 
 ```r
@@ -120,7 +120,7 @@ str(activity)
 
 ##### Compute the total number of steps taken per day
 
-Create a table (steps_per_day) with the total number of steps taken each day. To do this, use the dplyr package to group the activity table by date and sum the number of taken each each day:
+Create a table (steps_per_day) with the total number of steps taken each day. To do this, use the dplyr package to group the activity table by date and sum the number of steps taken for each each day:
 
 ```r
 suppressPackageStartupMessages(library(dplyr))
@@ -244,7 +244,9 @@ steps_per_interval[which.max(steps_per_interval$steps),]
 
 ##### Compute the average weekday and weekend activity patterns 
 
-Use the categorical attribute we added earlier to compute the average weekday and weekend patterns.
+Use the categorical attribute we added to compute the average weekday and weekend patterns. 
+
+This is the same computation used to compute averages for all days, except here we filter() to select only the weekend or weekday days. 
 
 Compute the average number of steps for each 5-min interval over all weekday days:
 
@@ -286,7 +288,7 @@ summary(weekend_steps_per_interval)
 ##                     Max.   :175.000
 ```
 
-##### Plot the weekend and weekday average activty in a panel plot
+##### Plot the weekend and weekday average activity in a panel plot
 
 Let's use the base graphics package (Even though it would probably be easier and prettier to use lattice or ggplot, we can just reuse the plot we did above and tweek the data being shown):
 
