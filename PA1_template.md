@@ -196,7 +196,7 @@ head(steps_per_interval)
 
 ##### Plot the average number of sets over the day
 
-Let's plot that time series. To get a pretty x-axis label, convert hhmm variable to a real timestamp using the strptime() function:
+Let's plot that time series. To get a pretty x-axis label, convert hhmm variable to a real time stamp using the strptime() function:
 
 ```r
 plot(x = strptime(steps_per_interval$hhmm, format('%H%M')), 
@@ -226,7 +226,7 @@ steps_per_interval[which.max(steps_per_interval$steps),]
 
 ### Imputing missing values
 
-Let's identify and fill in missing data then re-visit the analsyis of the total number of steps per day.
+Let's identify and fill in missing data then re-visit the analysis of the total number of steps per day.
 
 ##### Compute the number of missing values in the dataset
 
@@ -257,23 +257,79 @@ This simple strategy may not get rid of all NAs. We will compare the number of N
 So let's create a new data set with the missing values filled according to this strategy.
 
 ##### Create a new data set with missing values filled in
+
+```r
+activity2 <- activity
+
+# Get row numbers of NA measurements
+na_row_nums <- which(!complete.cases(activity2))
+
+# Helper function to replace NA for a given row number in the activity2 data set
+fix.na <- function(activityi) {
+  
+  intervali <- activity2[activityi,]$hhmm
+  
+  new_value <- steps_per_interval[which(steps_per_interval$hhmm == intervali),]$steps
+  
+  activity[activityi,]$steps <- new_value
+}
+
+activity2[na_row_nums,]$steps <- sapply(na_row_nums, fix.na)
+summary(activity2$steps)
 ```
-TODO
+
 ```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    0.00    0.00    0.00   37.38   27.00  806.00
+```
+The summary (above) of the new data set shows no NA values. Compare it to a summary of the original activty data set (below):
+
+```r
+summary(activity$steps)
+```
+
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+##    0.00    0.00    0.00   37.38   12.00  806.00    2304
+```
+Note the NAs have been replaced and that the 3rd Quartile is signficantly higher in the new data set.
 
 ##### Plot a histogram of the total number of steps per day
 
-Let's look at the distribution of steps taken in a day:
+Let's look at the distribution of steps taken in a day in the new activity data set:
+
+```r
+steps_per_day2 <- activity2 %>% group_by(date) %>% summarise(steps = sum(steps))
+
+hist(steps_per_day2$steps, 
+     xlab = "Number of steps taken in a day",
+     main = "Histogram of number of steps taken in a day with no-NA data set")
 ```
-TODO
-```
+
+![](PA1_template_files/figure-html/unnamed-chunk-17-1.png) 
 
 ##### Compute the mean and median of the total number of steps per day
 
-For the imputed data set, compute the mean and median of total number of steps per day and compare that to the original data set.
+For the imputed data set, compute the mean and median of total number of steps per day:
+
+```r
+mean_steps_per_day2 <- mean(steps_per_day2$steps)
+mean_steps_per_day2
 ```
-TODO
+
 ```
+## [1] 10766.19
+```
+
+```r
+median_steps_per_day2 <- median(steps_per_day2$steps)
+median_steps_per_day2
+```
+
+```
+## [1] 10766.19
+```
+Wow, they are exactly the same. That's unusual. That needs some more investigation to ensure we did the NA substitution corrrectly.
 
 ### Are there differences in activity patterns between weekdays and weekends?
 
@@ -325,7 +381,7 @@ summary(weekend_steps_per_interval)
 
 ##### Plot the weekend and weekday average activity in a panel plot
 
-Let's use the base graphics package (Even though it would probably be easier and prettier to use lattice or ggplot, we can just reuse the plot we did above and tweek the data being shown):
+Let's use the base graphics package (Even though it would probably be easier and prettier to use lattice or ggplot, we can just reuse the plot we did above and tweak the data being shown):
 
 ```r
 par(mfrow=c(2,1))
@@ -347,5 +403,5 @@ plot(x = strptime(weekend_steps_per_interval$hhmm, format('%H%M')),
      ylim=c(0,250))
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-17-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-21-1.png) 
 
