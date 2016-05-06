@@ -1,3 +1,7 @@
+##Published Report
+
+[How Many Steps per Day?](http://rpubs.com/timwise/49669)
+
 ## Introduction
 
 It is now possible to collect a large amount of data about personal
